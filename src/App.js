@@ -1,26 +1,69 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, Suspense } from "react";
+import "./App.css";
+import { connect } from "react-redux";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { ThemeProvider } from "@material-ui/styles";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import * as actions from "./store/actions/index";
+import theme from "./theme";
+const LoginPage = React.lazy(() => {
+  return import("./containers/LoginPage/LoginPage");
+});
+const RolePage = React.lazy(() => {
+  return import("./containers/RolePage/RolePage");
+});
+const HomePage = React.lazy(() => {
+  return import("./containers/HomePage/HomePage");
+});
 
-function App() {
+function App(props) {
+  const { onTryAutoSignUp } = props;
+  useEffect(() => {
+    onTryAutoSignUp();
+  }, [onTryAutoSignUp]);
+  let routes = null;
+  if (props.isAuth) {
+    routes = (
+      <Switch>
+        <Route path="/role" render={props => <RolePage {...props} />} />
+        <Route path="/logout" render={props => <LoginPage {...props} />} />
+        <Route path="/auth" render={props => <LoginPage {...props} />} />
+        <Route path="/" render={props => <HomePage {...props} />} />
+        <Redirect to="/" />
+      </Switch>
+    );
+  } else {
+    routes = (
+      <Switch>
+        <Route path="/auth" render={props => <LoginPage {...props} />} />
+        <Redirect to="/auth" />
+      </Switch>
+    );
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Suspense
+        fallback={
+          <Backdrop open={true}>
+            <CircularProgress color="secondary" />
+          </Backdrop>
+        }
+      >
+        {routes}
+      </Suspense>
+    </ThemeProvider>
   );
 }
-
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAuth: state.token !== null,
+    chainCodeID: state.chainCodeID
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignUp: () => dispatch(actions.authCheckState())
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);
