@@ -11,9 +11,11 @@ const logoutSucceed = () => {
   };
 };
 export function* logoutSaga(action) {
+  console.log("hello1");
   yield call([localStorage, "removeItem"], "token");
   yield call([localStorage, "removeItem"], "expirationDate");
   yield call([localStorage, "removeItem"], "userId");
+  yield call([localStorage, "removeItem"], "chaincodeID");
   console.log(logoutSucceed === { type: actionTypes.AUTH_LOGOUT });
   yield put(actions.logoutSucceed());
 }

@@ -18,6 +18,7 @@ export const authFail = error => {
   };
 };
 export const authLogout = () => {
+  console.log("logout");
   return {
     type: actionTypes.AUTH_INITIATE_LOGOUT
   };

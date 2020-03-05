@@ -16,7 +16,9 @@ const RolePage = React.lazy(() => {
 const HomePage = React.lazy(() => {
   return import("./containers/HomePage/HomePage");
 });
-
+const LogoutPage = React.lazy(() => {
+  return import("./containers/LoginPage/Logout/Logout");
+});
 function App(props) {
   const { onTryAutoSignUp } = props;
   useEffect(() => {
@@ -27,7 +29,7 @@ function App(props) {
     routes = (
       <Switch>
         <Route path="/role" render={props => <RolePage {...props} />} />
-        <Route path="/logout" render={props => <LoginPage {...props} />} />
+        <Route path="/logout" render={props => <LogoutPage {...props} />} />
         <Route path="/auth" render={props => <LoginPage {...props} />} />
         <Route path="/" render={props => <HomePage {...props} />} />
         <Redirect to="/" />

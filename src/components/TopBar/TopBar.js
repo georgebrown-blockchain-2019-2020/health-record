@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/styles";
 import { AppBar, Toolbar, Hidden, IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import InputIcon from "@material-ui/icons/Input";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,7 +15,11 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   signOutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
+    color: "white",
+    "&:hover": {
+      color: "blue"
+    }
   }
 }));
 
@@ -28,11 +33,9 @@ const Topbar = props => {
       <Toolbar>
         <p>Health Record</p>
         <div className={classes.flexGrow} />
-        <Hidden mdDown>
-          <IconButton className={classes.signOutButton} color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
+        <NavLink to="/logout" className={classes.signOutButton}>
+          <InputIcon />
+        </NavLink>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onSidebarOpen}>
             <MenuIcon />

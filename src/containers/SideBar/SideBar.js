@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Sidebar = props => {
-  const { open, variant, onClose, className, ...rest } = props;
+  const { open, variant, onClose, className, chainCodeID } = props;
 
   const classes = useStyles();
   const doctorPages = [
@@ -67,12 +67,10 @@ const Sidebar = props => {
       open={open}
       variant={variant}
     >
-      <div {...rest} className={clsx(classes.root, className)}>
+      <div className={clsx(classes.root, className)}>
         <SidebarNav
           className={classes.nav}
-          pages={
-            props.chainCodeID.includes("patient") ? patientPages : doctorPages
-          }
+          pages={chainCodeID.includes("patient") ? patientPages : doctorPages}
         />
       </div>
     </Drawer>
@@ -90,4 +88,5 @@ const mapStateToProps = state => {
     chainCodeID: state.chainCodeID
   };
 };
+
 export default connect(mapStateToProps)(Sidebar);
