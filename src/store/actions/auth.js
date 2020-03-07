@@ -53,30 +53,32 @@ export const authCheckState = () => {
     type: actionTypes.AUTH_CHECK_STATE
   };
 };
-export const setupChainCodeID = (idToken, role) => {
-  console.log("hello");
+export const setupUser = (idToken, role, userName, userId) => {
   return {
-    type: actionTypes.SET_UP_CHAIN_CODE_ID,
+    type: actionTypes.SET_UP_USER_ID,
     idToken: idToken,
-    role: role
+    role: role,
+    userName: userName,
+    userId: userId
   };
 };
-export const setupChainCodeIDSuccess = chainCodeID => {
+export const setupUserSuccess = (role, userName) => {
   console.log("hello");
   return {
-    type: actionTypes.SET_UP_CHAIN_CODE_ID_SUCCESS,
-    chainCodeID: chainCodeID
+    type: actionTypes.SET_UP_USER_SUCCESS,
+    role: role,
+    userName: userName
   };
 };
-export const setupChainCodeIDStart = () => {
+export const setupUserStart = () => {
   return {
-    type: actionTypes.SET_UP_CHAIN_CODE_ID_START
+    type: actionTypes.SET_UP_USER_START
   };
 };
 
-export const setupChainCodeIDFail = error => {
+export const setupUserFail = error => {
   return {
-    type: actionTypes.SET_UP_CHAIN_CODE_ID_START,
+    type: actionTypes.SET_UP_USER_FAIL,
     error: error
   };
 };

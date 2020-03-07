@@ -1,36 +1,14 @@
 import React, { useState } from "react";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-const StyledTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: 14
-  }
-}))(TableCell);
-const StyledTableRow = withStyles(theme => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.background.default
-    }
-  }
-}))(TableRow);
-function createData(doctorID, date, info) {
-  return { doctorID, date, info };
-}
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { createData } from "../../shared/utility";
+import TableData from "../../components/TableData/TableData";
+
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -50,49 +28,59 @@ const useStyles = makeStyles(theme => ({
     minWidth: 700
   }
 }));
+
+const rows = [
+  createData(
+    "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1QifQ",
+    new Date().toString(),
+    "headache and flu"
+  ),
+  createData(
+    "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif1",
+    new Date().toString(),
+    "headache and flu"
+  ),
+  createData(
+    "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif2",
+    new Date().toString(),
+    "headache and flu"
+  ),
+  createData(
+    "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif3",
+    new Date().toString(),
+    "headache and flussssssssssssssssssss"
+  ),
+  createData(
+    "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif4",
+    "new Date()",
+    "headache and flu"
+  )
+];
+const userList = ["user_1", "user_2", "user_3"];
 function RecordPage() {
   const classes = useStyles();
   const [labelWidth, setLabelWidth] = React.useState(0);
   const inputLabel = React.useRef(null);
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
+    setPatientList(userList);
   }, []);
+  const [loading, setLoading] = useState(false);
   const [patientId, setPatientId] = useState("");
-  const [patientList, setPatientList] = React.useState([
-    "user_1",
-    "user_2",
-    "user_3"
-  ]);
+  const [patientList, setPatientList] = React.useState([]);
+  const [patientRecords, setPatientRecords] = React.useState([]);
   const handleChange = e => {
     setPatientId(e.target.value);
   };
-  const rows = [
-    createData(
-      "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1QifQ",
-      new Date().toString(),
-      "headache and flu"
-    ),
-    createData(
-      "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif1",
-      new Date().toString(),
-      "headache and flu"
-    ),
-    createData(
-      "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif2",
-      new Date().toString(),
-      "headache and flu"
-    ),
-    createData(
-      "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif3",
-      new Date().toString(),
-      "headache and flussssssssssssssssssss"
-    ),
-    createData(
-      "doctor_eyJhbGciOiJSUzI1NiIsImtpZCI6IjBlYTNmN2EwMjQ4YmU0ZTBkZjAyYWVlZWIyMGIxZDJlMmI3ZjI0NzQiLCJ0eXAiOiJKV1Qif4",
-      "new Date()",
-      "headache and flu"
-    )
-  ];
+  const getPatientRecords = () => {
+    setLoading(true);
+    setPatientRecords([]);
+    setTimeout(() => {
+      setLoading(false);
+      setPatientRecords(rows);
+    }, 1000);
+  };
+
   return (
     <div className={classes.center}>
       <FormControl variant="outlined" className={classes.formControl}>
@@ -103,7 +91,7 @@ function RecordPage() {
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
           value={patientId}
-          onChange={() => handleChange()}
+          onChange={e => handleChange(e)}
           labelWidth={labelWidth}
         >
           <MenuItem value="">
@@ -121,35 +109,21 @@ function RecordPage() {
         disabled={!patientId}
         color="secondary"
         className={classes.button}
+        onClick={() => getPatientRecords()}
       >
         Check Records
       </Button>
-      <TableContainer component={Paper}>
-        <Table
-          className={classes.table}
-          size="small"
-          aria-label="a dense table"
-        >
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Doctor ID</StyledTableCell>
-              <StyledTableCell align="center">Date</StyledTableCell>
-              <StyledTableCell align="center">Treatment Info</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <StyledTableRow key={row.doctorID}>
-                <StyledTableCell component="th" scope="row">
-                  {row.doctorID}
-                </StyledTableCell>
-                <StyledTableCell align="center">{row.date}</StyledTableCell>
-                <StyledTableCell align="center">{row.info}</StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {loading && (
+        <React.Fragment>
+          <LinearProgress variant="query" className={classes.mgTop} />{" "}
+          <LinearProgress
+            variant="query"
+            color="secondary"
+            className={classes.mgTop}
+          />
+        </React.Fragment>
+      )}
+      {patientRecords.length !== 0 && <TableData rows={patientRecords} />}
     </div>
   );
 }

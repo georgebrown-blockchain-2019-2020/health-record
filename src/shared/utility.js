@@ -4,6 +4,9 @@ export const updateObject = (oldObject, updatedValues) => {
     ...updatedValues
   };
 };
+export function createData(doctorID, date, info) {
+  return { doctorID, date, info };
+}
 export const checkValidity = (value, rules) => {
   let error = [];
   if (rules.required) {

@@ -7,6 +7,7 @@ import SidebarNav from "../../components/SideBarNav/SideBarNav";
 import CreateIcon from "@material-ui/icons/Create";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { connect } from "react-redux";
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -32,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Sidebar = props => {
-  const { open, variant, onClose, className, chainCodeID } = props;
+  const { open, variant, onClose, className, role } = props;
 
   const classes = useStyles();
   const doctorPages = [
@@ -57,6 +58,11 @@ const Sidebar = props => {
       title: "Patient's Record",
       href: "/patientrecord",
       icon: <LocalHospitalIcon />
+    },
+    {
+      title: "Access List",
+      href: "/accesslist",
+      icon: <LockOpenIcon />
     }
   ];
   return (
@@ -70,7 +76,7 @@ const Sidebar = props => {
       <div className={clsx(classes.root, className)}>
         <SidebarNav
           className={classes.nav}
-          pages={chainCodeID.includes("patient") ? patientPages : doctorPages}
+          pages={role === "patient" ? patientPages : doctorPages}
         />
       </div>
     </Drawer>
@@ -85,7 +91,7 @@ Sidebar.propTypes = {
 };
 const mapStateToProps = state => {
   return {
-    chainCodeID: state.chainCodeID
+    role: state.role
   };
 };
 

@@ -3,7 +3,12 @@ import { delay } from "redux-saga/effects";
 import * as actionTypes from "../actions/actionTypes";
 import * as actions from "../actions/index";
 import axios from "axios";
-import { SIGN_IN_URL, SIGN_UP_URL, UPDATE_USER_INFO } from "../../api";
+import {
+  SIGN_IN_URL,
+  SIGN_UP_URL,
+  UPDATE_USER_INFO,
+  DATABASE_URL
+} from "../../api";
 const logoutSucceed = () => {
   console.log("function");
   return {
@@ -15,7 +20,8 @@ export function* logoutSaga(action) {
   yield call([localStorage, "removeItem"], "token");
   yield call([localStorage, "removeItem"], "expirationDate");
   yield call([localStorage, "removeItem"], "userId");
-  yield call([localStorage, "removeItem"], "chaincodeID");
+  yield call([localStorage, "removeItem"], "role");
+  yield call([localStorage, "removeItem"], "userName");
   console.log(logoutSucceed === { type: actionTypes.AUTH_LOGOUT });
   yield put(actions.logoutSucceed());
 }
@@ -23,21 +29,22 @@ export function* checkAuthTimeoutSaga(action) {
   yield delay(action.expirationTime * 1000);
   yield put(actions.authLogout());
 }
-export function* setUpRole(action) {
-  yield put(actions.setupChainCodeIDStart());
-  const updatedProfile = {
-    idToken: action.idToken,
-    displayName: action.role,
-    returnSecureToken: false
+export function* setUpUser(action) {
+  yield put(actions.setupUserStart());
+  const infor = {
+    role: action.role,
+    userName: action.userName,
+    userId: action.userId
   };
+  const res = yield axios.post(
+    `${DATABASE_URL}/information.json?auth=${action.idToken}`,
+    infor
+  );
+  console.log(res);
   try {
-    const userProfile = yield axios.post(UPDATE_USER_INFO, updatedProfile);
-    const chainCodeID =
-      userProfile.data.displayName + "_" + userProfile.data.localId;
-    yield localStorage.setItem("chainCodeID", chainCodeID);
-    yield put(actions.setupChainCodeIDSuccess(chainCodeID));
+    yield put(actions.setupUserSuccess(action.role, action.userName));
   } catch (error) {
-    yield put(actions.setupChainCodeIDFail());
+    yield put(actions.setupUserFail(error));
   }
 }
 export function* authUserSaga(action) {
@@ -53,14 +60,21 @@ export function* authUserSaga(action) {
   }
   try {
     const response = yield axios.post(url, authData);
-
-    if (response.data.displayName) {
-      const chainCodeID =
-        response.data.displayName + "_" + response.data.idToken;
-      yield localStorage.setItem("chainCodeID", chainCodeID);
-      yield put(actions.setupChainCodeIDSuccess(chainCodeID));
+    const queryParams = `?auth=${response.data.idToken}&orderBy="userId"&equalTo="${response.data.localId}"`;
+    const res = yield axios.get(
+      `${DATABASE_URL}/information.json${queryParams}`
+    );
+    console.log(res.data);
+    if (res.data) {
+      for (let key in res.data) {
+        console.log(key);
+        yield put(
+          actions.setupUserSuccess(res.data[key].role, res.data[key].userName)
+        );
+        yield localStorage.setItem("role", res.data[key].role);
+        yield localStorage.setItem("userName", res.data[key].userName);
+      }
     }
-
     const expirationData = new Date(
       new Date().getTime() + response.data.expiresIn * 1000
     );
@@ -85,8 +99,9 @@ export function* authCheckStateSaga(action) {
     );
     if (expirationDate > new Date()) {
       const userId = yield localStorage.getItem("userId");
-      const chainCodeID = yield localStorage.getItem("chainCodeID");
-      yield put(actions.setupChainCodeIDSuccess(chainCodeID));
+      const role = yield localStorage.getItem("role");
+      const userName = yield localStorage.getItem("userName");
+      yield put(actions.setupUserSuccess(role, userName));
       yield put(actions.authSuccess(token, userId));
       yield put(
         actions.checkAuthTimeOut(

@@ -5,7 +5,7 @@ import {
   checkAuthTimeoutSaga,
   authUserSaga,
   authCheckStateSaga,
-  setUpRole
+  setUpUser
 } from "./auth";
 
 export function* watchAuth() {
@@ -14,6 +14,6 @@ export function* watchAuth() {
     takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga),
     takeEvery(actionTypes.AUTH_USER, authUserSaga),
     takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga),
-    takeEvery(actionTypes.SET_UP_CHAIN_CODE_ID, setUpRole)
+    takeEvery(actionTypes.SET_UP_USER_ID, setUpUser)
   ]);
 }

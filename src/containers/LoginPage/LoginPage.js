@@ -45,7 +45,7 @@ const SignIn = props => {
   const classes = useStyles();
   const {
     isAuth,
-    chainCodeID,
+    role,
     loading,
     authRedirectPath,
     error,
@@ -77,12 +77,12 @@ const SignIn = props => {
     setControl(updatedControls);
   };
   useEffect(() => {
-    if (chainCodeID) {
+    if (role) {
       onSetAuthRedirectPath("/");
     } else {
       onSetAuthRedirectPath("/role");
     }
-  }, [chainCodeID, onSetAuthRedirectPath]);
+  }, [role, onSetAuthRedirectPath]);
   const isValid =
     !controls.email.value ||
     !controls.password.value ||
@@ -192,7 +192,7 @@ const mapStateToProps = state => {
     loading: state.loading,
     error: state.error,
     isAuth: state.token !== null,
-    chainCodeID: state.chainCodeID,
+    role: state.role,
     authRedirectPath: state.authRedirectPath
   };
 };

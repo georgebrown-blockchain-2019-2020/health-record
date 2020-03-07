@@ -8,8 +8,8 @@ export {
   authStart,
   authFail,
   authSuccess,
-  setupChainCodeID,
-  setupChainCodeIDSuccess,
-  setupChainCodeIDStart,
-  setupChainCodeIDFail
+  setupUser,
+  setupUserStart,
+  setupUserFail,
+  setupUserSuccess
 } from "./auth";

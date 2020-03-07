@@ -12,6 +12,8 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from "@material-ui/pickers";
+import { green } from "@material-ui/core/colors";
+import CircularProgress from "@material-ui/core/CircularProgress";
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
@@ -25,7 +27,26 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: "2rem auto",
-    display: "block"
+    display: "block",
+    height: "50px",
+    width: "100px",
+    backgroundColor: green[500],
+    "&:hover": {
+      backgroundColor: green[700]
+    },
+    color: "white"
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: "relative"
+  },
+  buttonProgress: {
+    color: "white",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12
   }
 }));
 
@@ -33,6 +54,7 @@ function DoctorPage() {
   const classes = useStyles();
   const [labelWidth, setLabelWidth] = React.useState(0);
   const inputLabel = React.useRef(null);
+  const [loading, setLoading] = useState(false);
   const [patientRecord, setPatientRecord] = useState({
     patientID: "",
     date: new Date(),
@@ -57,7 +79,10 @@ function DoctorPage() {
     setPatientRecord(updatedInfo);
   };
   const submitRecord = () => {
-    alert("success");
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
   let checkValidSubmit =
     patientRecord.info === "" || patientRecord.patientID === "";
@@ -110,15 +135,20 @@ function DoctorPage() {
           className={classes.formControl}
         />
       </MuiPickersUtilsProvider>
-      <Button
-        variant="outlined"
-        disabled={checkValidSubmit}
-        color="secondary"
-        className={classes.button}
-        onClick={submitRecord}
-      >
-        Submit
-      </Button>
+      <div className={classes.wrapper}>
+        <Button
+          variant="outlined"
+          disabled={checkValidSubmit}
+          color="secondary"
+          className={classes.button}
+          onClick={submitRecord}
+        >
+          {!loading && "Submit"}
+        </Button>
+        {loading && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
+        )}
+      </div>
     </div>
   );
 }

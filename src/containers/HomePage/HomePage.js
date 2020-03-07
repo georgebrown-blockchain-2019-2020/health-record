@@ -13,9 +13,14 @@ const DoctorPage = React.lazy(() => {
 const PatientPage = React.lazy(() => {
   return import("../PatientPage/PatientPage");
 });
+const AccessPage = React.lazy(() => {
+  return import("../AccessPage/AccessPage");
+});
 function HomePage(props) {
   let route = null;
-  if (props.chainCodeID.includes("patient")) {
+  console.log("hello");
+  console.log(props.role);
+  if (props.role === "patient") {
     route = (
       <Switch>
         <Route path="/record" render={props => <PatientPage {...props} />} />
@@ -23,6 +28,7 @@ function HomePage(props) {
           path="/patientrecord"
           render={props => <RecordPage {...props} />}
         />
+        <Route path="/accesslist" render={props => <AccessPage {...props} />} />
         <Redirect to="/record" />
       </Switch>
     );
@@ -50,14 +56,15 @@ function HomePage(props) {
           </Backdrop>
         }
       >
-        {route}
+        {!props.role ? <Redirect to={props.authRedirectPath} /> : route}
       </Suspense>
     </Layout>
   );
 }
 const mapStateToProps = state => {
   return {
-    chainCodeID: state.chainCodeID
+    authRedirectPath: state.authRedirectPath,
+    role: state.role
   };
 };
 export default connect(mapStateToProps)(HomePage);
