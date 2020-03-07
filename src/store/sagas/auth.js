@@ -6,7 +6,8 @@ import axios from "axios";
 import {
   SIGN_IN_URL,
   SIGN_UP_URL,
-  UPDATE_USER_INFO,
+  REGISTER_CLIENT_URL,
+  REGISTER_DOCTOR_URL,
   DATABASE_URL
 } from "../../api";
 const logoutSucceed = () => {
@@ -42,7 +43,32 @@ export function* setUpUser(action) {
   );
   console.log(res);
   try {
-    yield put(actions.setupUserSuccess(action.role, action.userName));
+    let registerRes;
+    if (action.role === "patient") {
+      registerRes = yield axios.post(
+        REGISTER_CLIENT_URL,
+        {
+          userId: action.userId
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*"
+          }
+        }
+      );
+    } else {
+      registerRes = yield axios.post(REGISTER_DOCTOR_URL, {
+        userId: action.userId
+      });
+    }
+    if (registerRes.data.result === "ok") {
+      yield put(actions.setupUserSuccess(action.role, action.userName));
+      yield localStorage.setItem("role", action.role);
+      yield localStorage.setItem("userName", action.userName);
+    } else {
+      console.log(registerRes);
+      yield put(actions.setupUserFail(registerRes.data));
+    }
   } catch (error) {
     yield put(actions.setupUserFail(error));
   }

@@ -7,3 +7,6 @@ export const GET_USER_INFO =
   "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAPbpI-9_gUryz9fYusEFdRdIaAkQ9f5H0";
 export const UPDATE_USER_INFO =
   "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAPbpI-9_gUryz9fYusEFdRdIaAkQ9f5H0";
+export const SERVER_URL = "http://35.239.146.52:3001";
+export const REGISTER_CLIENT_URL = `${SERVER_URL}/users/registerClient`;
+export const REGISTER_DOCTOR_URL = `${SERVER_URL}/users/registerDoctor`;
