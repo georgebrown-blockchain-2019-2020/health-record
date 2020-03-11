@@ -1,0 +1,1 @@
+{"version":3,"sources":["RolePage.css"],"names":[],"mappings":"AAAA,MACE,WAAY,CACZ,YAAa,CACb,kBAAoB,CACpB,cACF,CACA,YACE,oBACF","file":"11.1aeebc0a.chunk.css","sourcesContent":[".icon {\n  width: 300px;\n  height: 300px;\n  transition: all 0.5s;\n  cursor: pointer;\n}\n.icon:hover {\n  transform: scale(1.2);\n}\n"]}

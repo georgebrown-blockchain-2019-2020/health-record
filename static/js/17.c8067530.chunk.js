@@ -1,0 +1,2 @@
+(this["webpackJsonphealth-record"]=this["webpackJsonphealth-record"]||[]).push([[17],{400:function(t,n,o){"use strict";o.r(n);var e=o(0),u=o.n(e),c=o(22),r=o(38),a=o(10);n.default=Object(r.b)(null,(function(t){return{onLogout:function(){return t(a.d())}}}))((function(t){var n=t.onLogout;return console.log("logout"),Object(e.useEffect)((function(){n()}),[n]),u.a.createElement(c.a,{to:"/"})}))}}]);
+//# sourceMappingURL=17.c8067530.chunk.js.map
