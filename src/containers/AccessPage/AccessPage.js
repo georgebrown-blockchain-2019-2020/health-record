@@ -49,7 +49,6 @@ function AccessPage(props) {
           const detail = await axios.get(
             `${DATABASE_URL}/information.json?auth=${props.token}&orderBy="userId"&equalTo="${list.data.data[i].id}"`
           );
-          console.log(detail);
           for (let key in detail.data) {
             let user = {
               ...list.data.data[i],
@@ -82,13 +81,11 @@ function AccessPage(props) {
       )
       .then(result => {
         setLoading(false);
-        console.log(result);
         if (result.data.status === "success") {
           const updatedList = [
             ...accessList.slice(0, index),
             ...accessList.slice(index + 1)
           ];
-          console.log(updatedList);
           setAccessList(updatedList);
         }
       })
@@ -104,7 +101,6 @@ function AccessPage(props) {
         `${DATABASE_URL}/information.json?auth=${props.token}&orderBy="userId"&equalTo="${id}"`
       )
       .then(infor => {
-        console.log(infor);
         for (let key in infor.data) {
           axios
             .put(ADD_PERMISSION_URL, {
@@ -149,7 +145,6 @@ function AccessPage(props) {
       />
     ));
   }
-  console.log(accessListContent);
   return (
     <div className={classes.center}>
       <h2>Access List</h2>

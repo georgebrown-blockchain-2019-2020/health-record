@@ -1,8 +1,5 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import DoctorIcon from "../../assets/images/doctor-icon.png";
-import PatientIcon from "../../assets/images/patient-icon.png";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import "./RolePage.css";
@@ -58,14 +55,9 @@ function RolePage(props) {
     tokenId,
     userId,
     authRedirectPath,
-    onSelectRole,
     onSetAuthRedirectPath,
     onSubmitProfile
   } = props;
-  const selectRole = role => {
-    onSelectRole(tokenId, role);
-    onSetAuthRedirectPath("/");
-  };
   const submitProfile = () => {
     onSubmitProfile(tokenId, userInfo.role, userInfo.userName, userId);
     onSetAuthRedirectPath("/");

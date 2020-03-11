@@ -39,29 +39,29 @@ const Sidebar = props => {
   const doctorPages = [
     {
       title: "Description",
-      href: "/description",
+      href: `${process.env.PUBLIC_URL}/description`,
       icon: <CreateIcon />
     },
     {
       title: "Patient's Record",
-      href: "/patientrecord",
+      href: `${process.env.PUBLIC_URL}/patientrecord`,
       icon: <LocalHospitalIcon />
     }
   ];
   const patientPages = [
     {
       title: "Record",
-      href: "/record",
+      href: `${process.env.PUBLIC_URL}/record`,
       icon: <FavoriteIcon />
     },
     {
       title: "Patient's Record",
-      href: "/patientrecord",
+      href: `${process.env.PUBLIC_URL}/patientrecord`,
       icon: <LocalHospitalIcon />
     },
     {
       title: "Access List",
-      href: "/accesslist",
+      href: `${process.env.PUBLIC_URL}/accesslist`,
       icon: <LockOpenIcon />
     }
   ];

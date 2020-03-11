@@ -18,8 +18,6 @@ const AccessPage = React.lazy(() => {
 });
 function HomePage(props) {
   let route = null;
-  console.log("hello");
-  console.log(props.role);
   if (props.role === "patient") {
     route = (
       <Switch>

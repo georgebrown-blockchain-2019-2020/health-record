@@ -1,5 +1,6 @@
 {
   "name": "health-record",
+  "homepage": "https://leodinh.github.io/health-record/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,6 +13,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "date-fns": "^2.10.0",
+    "gh-pages": "^2.2.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-redux": "^7.2.0",
@@ -23,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"

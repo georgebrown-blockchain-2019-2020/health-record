@@ -5,7 +5,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 function AccessItem(props) {
-  console.log("hello");
   return (
     <ListItem>
       <ListItemText primary={props.item.name} secondary={props.item.doctor} />

@@ -18,7 +18,6 @@ export const authFail = error => {
   };
 };
 export const authLogout = () => {
-  console.log("logout");
   return {
     type: actionTypes.AUTH_INITIATE_LOGOUT
   };
@@ -63,7 +62,6 @@ export const setupUser = (idToken, role, userName, userId) => {
   };
 };
 export const setupUserSuccess = (role, userName) => {
-  console.log("hello");
   return {
     type: actionTypes.SET_UP_USER_SUCCESS,
     role: role,

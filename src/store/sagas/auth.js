@@ -1,6 +1,5 @@
 import { put, call } from "redux-saga/effects";
 import { delay } from "redux-saga/effects";
-import * as actionTypes from "../actions/actionTypes";
 import * as actions from "../actions/index";
 import axios from "axios";
 import {
@@ -12,20 +11,12 @@ import {
   CREATE_DOCTOR_RECORD_URL,
   CREATE_PATIENT_RECORD_URL
 } from "../../api";
-const logoutSucceed = () => {
-  console.log("function");
-  return {
-    type: actionTypes.AUTH_LOGOUT
-  };
-};
 export function* logoutSaga(action) {
-  console.log("hello1");
   yield call([localStorage, "removeItem"], "token");
   yield call([localStorage, "removeItem"], "expirationDate");
   yield call([localStorage, "removeItem"], "userId");
   yield call([localStorage, "removeItem"], "role");
   yield call([localStorage, "removeItem"], "userName");
-  console.log(logoutSucceed === { type: actionTypes.AUTH_LOGOUT });
   yield put(actions.logoutSucceed());
 }
 export function* checkAuthTimeoutSaga(action) {
@@ -39,11 +30,10 @@ export function* setUpUser(action) {
     userName: action.userName,
     userId: action.userId
   };
-  const res = yield axios.post(
+  yield axios.post(
     `${DATABASE_URL}/information.json?auth=${action.idToken}`,
     infor
   );
-  console.log(res);
   try {
     let registerRes;
     let recordChaincode;
@@ -70,8 +60,6 @@ export function* setUpUser(action) {
         id: action.userId
       });
     }
-    console.log(registerRes);
-    console.log(recordChaincode);
     if (
       registerRes.data.result === "ok" &&
       recordChaincode.data.status === "success"
@@ -80,7 +68,6 @@ export function* setUpUser(action) {
       yield localStorage.setItem("role", action.role);
       yield localStorage.setItem("userName", action.userName);
     } else {
-      console.log(registerRes);
       if (registerRes.data.result === "ok") {
         yield put(actions.setupUserFail(recordChaincode.message));
       } else yield put(actions.setupUserFail(registerRes.data));
@@ -106,10 +93,8 @@ export function* authUserSaga(action) {
     const res = yield axios.get(
       `${DATABASE_URL}/information.json${queryParams}`
     );
-    console.log(res.data);
     if (res.data) {
       for (let key in res.data) {
-        console.log(key);
         yield put(
           actions.setupUserSuccess(res.data[key].role, res.data[key].userName)
         );

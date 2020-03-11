@@ -86,7 +86,6 @@ function DoctorPage(props) {
               ...patientIDs.data.data[i],
               name: infor.data[key].userName
             };
-            console.log(user);
             updatedList.push(user);
           }
         }

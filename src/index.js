@@ -21,7 +21,7 @@ const store = createStore(
 sagaMiddleware.run(watchAuth);
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <App />
     </BrowserRouter>
   </Provider>,

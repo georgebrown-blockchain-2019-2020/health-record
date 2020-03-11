@@ -44,7 +44,6 @@ const useStyles = makeStyles(theme => ({
 }));
 function TableData(props) {
   const classes = useStyles();
-  console.log(props);
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
@@ -59,7 +58,6 @@ function TableData(props) {
           {props.rows.length > 0 &&
             props.rows.map(row => (
               <StyledTableRow key={row.date}>
-                {console.log(props.rows.length)}
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
