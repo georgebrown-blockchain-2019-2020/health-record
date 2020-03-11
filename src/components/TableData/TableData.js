@@ -44,26 +44,31 @@ const useStyles = makeStyles(theme => ({
 }));
 function TableData(props) {
   const classes = useStyles();
+  console.log(props);
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Doctor ID</StyledTableCell>
+            <StyledTableCell>Doctor Name</StyledTableCell>
             <StyledTableCell align="center">Date</StyledTableCell>
             <StyledTableCell align="center">Treatment Info</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.rows.map(row => (
-            <StyledTableRow key={row.doctorID}>
-              <StyledTableCell component="th" scope="row">
-                {row.doctorID}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.date}</StyledTableCell>
-              <StyledTableCell align="center">{row.info}</StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {props.rows.length > 0 &&
+            props.rows.map(row => (
+              <StyledTableRow key={row.date}>
+                {console.log(props.rows.length)}
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.date}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.information}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

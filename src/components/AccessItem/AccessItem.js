@@ -5,14 +5,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 function AccessItem(props) {
+  console.log("hello");
   return (
     <ListItem>
-      <ListItemText primary={props.id} />
+      <ListItemText primary={props.item.name} secondary={props.item.doctor} />
       <ListItemSecondaryAction>
         <IconButton
           edge="end"
           aria-label="delete"
-          onClick={() => props.delete(props.id)}
+          onClick={() => props.delete(props.item.id)}
           disabled={props.isLoading}
         >
           <DeleteIcon />

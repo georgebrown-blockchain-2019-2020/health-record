@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -6,6 +6,13 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import axios from "axios";
+import {
+  ADD_MEDICAL_INFO_URL,
+  GET_ALLOWED_LIST_URL,
+  DATABASE_URL
+} from "../../api";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -50,24 +57,54 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function DoctorPage() {
+function DoctorPage(props) {
   const classes = useStyles();
   const [labelWidth, setLabelWidth] = React.useState(0);
   const inputLabel = React.useRef(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [patientRecord, setPatientRecord] = useState({
     patientID: "",
     date: new Date(),
     info: ""
   });
-  const [patientList, setPatientList] = React.useState([
-    "user_1",
-    "user_2",
-    "user_3"
-  ]);
+  const [patientList, setPatientList] = React.useState([]);
+  const getPatientList = useCallback(async () => {
+    setLoading(true);
+    const patientIDs = await axios.get(
+      `${GET_ALLOWED_LIST_URL}?id=${props.userId}`
+    );
+    const updatedList = [];
+    try {
+      if (patientIDs.data.status === "success") {
+        for (let i = 0; i < patientIDs.data.data.length; i++) {
+          const infor = await axios.get(
+            `${DATABASE_URL}/information.json?auth=${props.token}&orderBy="userId"&equalTo="${patientIDs.data.data[i].id}"`
+          );
+          for (let key in infor.data) {
+            let user = {
+              ...patientIDs.data.data[i],
+              name: infor.data[key].userName
+            };
+            console.log(user);
+            updatedList.push(user);
+          }
+        }
+        setPatientList(updatedList);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        setError(patientIDs.data.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error.toString());
+    }
+  }, [props.token, props.userId]);
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
+    getPatientList();
+  }, [getPatientList]);
 
   const handleChange = input => e => {
     const updatedInfo = { ...patientRecord };
@@ -80,6 +117,25 @@ function DoctorPage() {
   };
   const submitRecord = () => {
     setLoading(true);
+    axios
+      .put(ADD_MEDICAL_INFO_URL, {
+        id: props.userId,
+        patientID: patientRecord.patientID,
+        info: patientRecord.info
+      })
+      .then(res => {
+        if (res.data.status === "success") {
+          setLoading(false);
+          setPatientRecord({ patientID: "", date: new Date(), info: "" });
+        } else {
+          setLoading(false);
+          setError(res.data.message);
+        }
+      })
+      .catch(error => {
+        setLoading(false);
+        setError(error.toString());
+      });
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -88,6 +144,7 @@ function DoctorPage() {
     patientRecord.info === "" || patientRecord.patientID === "";
   return (
     <div className={classes.center}>
+      <div>{error}</div>
       <h1>PRESCRIPTION</h1>
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
@@ -103,11 +160,12 @@ function DoctorPage() {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {patientList.map(patient => (
-            <MenuItem key={patient} value={patient}>
-              {patient}
-            </MenuItem>
-          ))}
+          {patientList.length !== 0 &&
+            patientList.map(patient => (
+              <MenuItem key={patient.id} value={patient.id}>
+                {patient.name}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <TextField
@@ -152,5 +210,12 @@ function DoctorPage() {
     </div>
   );
 }
-
-export default DoctorPage;
+const mapStateToProps = state => {
+  return {
+    role: state.role,
+    userId: state.userId,
+    authRedirectPath: state.authRedirectPath,
+    token: state.token
+  };
+};
+export default connect(mapStateToProps)(DoctorPage);

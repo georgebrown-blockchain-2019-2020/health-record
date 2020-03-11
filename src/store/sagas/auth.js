@@ -8,7 +8,9 @@ import {
   SIGN_UP_URL,
   REGISTER_CLIENT_URL,
   REGISTER_DOCTOR_URL,
-  DATABASE_URL
+  DATABASE_URL,
+  CREATE_DOCTOR_RECORD_URL,
+  CREATE_PATIENT_RECORD_URL
 } from "../../api";
 const logoutSucceed = () => {
   console.log("function");
@@ -44,6 +46,7 @@ export function* setUpUser(action) {
   console.log(res);
   try {
     let registerRes;
+    let recordChaincode;
     if (action.role === "patient") {
       registerRes = yield axios.post(
         REGISTER_CLIENT_URL,
@@ -56,18 +59,31 @@ export function* setUpUser(action) {
           }
         }
       );
+      recordChaincode = yield axios.post(CREATE_PATIENT_RECORD_URL, {
+        id: action.userId
+      });
     } else {
       registerRes = yield axios.post(REGISTER_DOCTOR_URL, {
         userId: action.userId
       });
+      recordChaincode = yield axios.post(CREATE_DOCTOR_RECORD_URL, {
+        id: action.userId
+      });
     }
-    if (registerRes.data.result === "ok") {
+    console.log(registerRes);
+    console.log(recordChaincode);
+    if (
+      registerRes.data.result === "ok" &&
+      recordChaincode.data.status === "success"
+    ) {
       yield put(actions.setupUserSuccess(action.role, action.userName));
       yield localStorage.setItem("role", action.role);
       yield localStorage.setItem("userName", action.userName);
     } else {
       console.log(registerRes);
-      yield put(actions.setupUserFail(registerRes.data));
+      if (registerRes.data.result === "ok") {
+        yield put(actions.setupUserFail(recordChaincode.message));
+      } else yield put(actions.setupUserFail(registerRes.data));
     }
   } catch (error) {
     yield put(actions.setupUserFail(error));
