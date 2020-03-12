@@ -1,10 +1,11 @@
 # Health Record (DAPP1 project in George Brown College)
 
-A simple project simulates health record systems with transparent and security data using Hyperledger Fabric.
+A simple project simulates health record systems with transparent and security data using Hyperledger Fabric .
+
 This project has 3 repositories:
-Front-end and document: https://github.com/leodinh/health-record .
-Back-end: https://github.com/leodinh/health-record-Back-End .
-Chaincode : https://github.com/leodinh/GBC_DAPP1_chaincode .
+* Front-end and document: https://github.com/leodinh/health-record .
+* Back-end: https://github.com/leodinh/health-record-Back-End .
+* Chaincode : https://github.com/leodinh/GBC_DAPP1_chaincode .
 
 ## Demo
 
@@ -22,7 +23,7 @@ Each patient has their own record which includes :
 - Allowedlist: list of patient id that can be accessed.
 - Health records: history of medical records.
   Each doctor has their own patient list that they can access.
-  <img src="./documentation/scheme.png" width="600">
+  ![](./documentation/scheme.png)
   _Health Record system_
 
 ## Architecture
