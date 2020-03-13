@@ -75,6 +75,7 @@ Three Layer:
 - Reactjs: App Framework.
 - Redux: state management pattern + library for Reactjs application.
 - Redux Saga: an redux middleware library.
+- Material-UI: library react components.
 - Firebase: data to store user information and authentication.
 
 ### Setup
